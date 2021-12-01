@@ -1,15 +1,23 @@
 package com.masters.group.exercise1;
 
+import com.masters.group.exercise1.models.Product;
+import com.masters.group.exercise1.utils.ProductHelper;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+import java.util.function.Predicate;
 
 import static com.masters.group.exercise1.utils.Constants.*;
 
 public class ShoppingCart {
+
+    private static final List<Product> products = new ArrayList<>();
 
     public static void main(String[] args){
         try {
@@ -30,8 +38,12 @@ public class ShoppingCart {
         String filePath = new File("").getAbsolutePath();
         Path filepath = Paths.get("%s/src/main/resources/stocks.csv".formatted(filePath));
         String content = Files.readString(filepath);
-        content.lines().forEach(System.out::println);
+        content.lines().filter(Predicate.not(String::isBlank)).forEach(l -> products.add(l.transform(ProductHelper::getProduct)));
+
+        products.forEach(p -> System.out.println(p.toString()));// TODO remove later
     }
+    
+
 
     private static void displayCategories(){
         String optionDisplay = """
