@@ -1,12 +1,13 @@
-package main.java.com.masters.group.exercise1;
+package com.masters.group.exercise1;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
-import static main.java.com.masters.group.exercise1.utils.Constants.*;
+import static com.masters.group.exercise1.utils.Constants.*;
 
 public class ShoppingCart {
 
@@ -26,7 +27,8 @@ public class ShoppingCart {
     }
 
     private static void readFile() throws IOException {
-        Path filepath = Paths.get("/stocks.csv");
+        String filePath = new File("").getAbsolutePath();
+        Path filepath = Paths.get("%s/src/main/resources/stocks.csv".formatted(filePath));
         String content = Files.readString(filepath);
         content.lines().forEach(System.out::println);
     }

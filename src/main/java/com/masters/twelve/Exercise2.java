@@ -1,4 +1,4 @@
-package main.java.com.masters.twelve;
+package com.masters.twelve;
 
 import java.text.NumberFormat;
 import java.util.Locale;

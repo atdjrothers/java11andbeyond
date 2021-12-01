@@ -1,4 +1,4 @@
-package main.java.com.masters.eleven;
+package com.masters.eleven;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

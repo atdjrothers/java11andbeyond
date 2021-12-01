@@ -1,4 +1,4 @@
-package main.java.com.masters.twelve;
+package com.masters.twelve;
 
 public class TotalPayable {
     private double total;

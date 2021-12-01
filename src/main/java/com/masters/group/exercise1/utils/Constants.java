@@ -1,4 +1,4 @@
-package main.java.com.masters.group.exercise1.utils;
+package com.masters.group.exercise1.utils;
 
 public class Constants {
 
