@@ -1,14 +1,19 @@
-package com.masters.java.group.exercise1;
+package main.java.com.masters.group.exercise1;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Scanner;
 
-import static com.masters.java.group.exercise1.utils.Constants.*;
+import static main.java.com.masters.group.exercise1.utils.Constants.*;
 
 public class ShoppingCart {
 
     public static void main(String[] args){
-        Scanner in = new Scanner(System.in);
         try {
+            Scanner in = new Scanner(System.in);
+            readFile();
             int option = 0;
             while(option != -2) {
                 displayCategories();
@@ -20,6 +25,11 @@ public class ShoppingCart {
         }
     }
 
+    private static void readFile() throws IOException {
+        Path filepath = Paths.get("/stocks.csv");
+        String content = Files.readString(filepath);
+        content.lines().forEach(System.out::println);
+    }
 
     private static void displayCategories(){
         String optionDisplay = """
