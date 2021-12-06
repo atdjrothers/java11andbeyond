@@ -2,14 +2,14 @@ package com.masters.group.exercise1.models;
 
 public class Order {
 
-    private int quantity;
+    private double quantity;
     private Product product;
 
-    public int getQuantity() {
+    public double getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(int quantity) {
+    public void setQuantity(double quantity) {
         this.quantity = quantity;
     }
 
@@ -21,7 +21,7 @@ public class Order {
         this.product = product;
     }
 
-    public String displayProduct(Product product, int quantity){
-        return "%s | price: %s %s x %d | %.2f".formatted(product.getName(), product.getPrice(), product.getType(), quantity, product.getPrice() * Double.valueOf(quantity));
+    public String displayProduct(Product product, double quantity){
+        return "%s | price: %s %s x %.2f | %.2f".formatted(product.getName(), product.getPrice(), product.getType(), quantity, product.getPrice() * quantity);
     }
 }
