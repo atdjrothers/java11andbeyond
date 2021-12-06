@@ -1,5 +1,6 @@
 package com.masters.group.exercise1;
 
+import com.masters.group.exercise1.models.Cart;
 import com.masters.group.exercise1.models.Order;
 import com.masters.group.exercise1.models.Product;
 import com.masters.group.exercise1.utils.ProductHelper;
@@ -36,6 +37,7 @@ public class ShoppingCart {
     private static void executeProgram() {
         Scanner in = new Scanner(System.in);
         int option = 0;
+        Cart cart = new Cart();
         while (option != -2) {
             displayCategories();
             option = in.nextInt();
@@ -52,10 +54,18 @@ public class ShoppingCart {
                 System.out.printf("\nChoose item (-1 to go back to Categories): \n");
                 int itemNumber = in.nextInt();
 
-                if (itemNumber < 1 || itemNumber > items.size() - 1) {
+                if (itemNumber > items.size() - 1) {
                     option = -1;
                 } else {
-
+                    System.out.printf("\nEnter How Many:");
+                    Order order = new Order();
+                    int quantity = in.nextInt();
+                    order.setQuantity(quantity);
+                    order.setProduct(items.get(itemNumber - 1));
+                    cart.addOrder(order);
+                    cart.addToTotalAmount(order.getProduct().getPrice()*quantity);
+                    System.out.printf("\nItem Added: " + order.displayProduct(order.getProduct(), quantity));
+                    System.out.printf("\n" + cart.displayCartDetails());
                 }
             }
         }
