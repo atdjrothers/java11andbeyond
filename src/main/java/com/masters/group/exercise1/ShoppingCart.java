@@ -3,6 +3,7 @@ package com.masters.group.exercise1;
 import com.masters.group.exercise1.models.Cart;
 import com.masters.group.exercise1.models.Order;
 import com.masters.group.exercise1.models.Product;
+import com.masters.group.exercise1.utils.PaymentDetails;
 import com.masters.group.exercise1.utils.ProductHelper;
 
 import java.io.File;
@@ -13,7 +14,9 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
-import static com.masters.group.exercise1.utils.Constants.*;
+
+import static com.masters.group.exercise1.utils.Constants.CATEGORY;
+import static com.masters.group.exercise1.utils.Constants.STRING_EMPTY;
 
 
 public class ShoppingCart {
@@ -22,11 +25,13 @@ public class ShoppingCart {
     private static final Map<String, List<Product>> productsMapByCategory = new HashMap<>();
     private static String[] CATEGORIES_KEY;
     private static final List<Order> orders = new ArrayList<>();
+    private static Cart cart = new Cart();
 
 
     public static void main(String[] args) throws IOException {
         readFile();
         try {
+
             executeProgram();
         } catch (Exception e) {
             System.out.println("Invalid Option");
@@ -42,9 +47,13 @@ public class ShoppingCart {
             displayCategories();
             option = in.nextInt();
             String category = switch(option) {
-                case 1 -> CATEGORIES_KEY[0];
-                case 2 -> CATEGORIES_KEY[1];
-                case 3 -> CATEGORIES_KEY[2]; // could have been option - 1
+                case -1 -> {
+                    checkout(in);
+                    yield STRING_EMPTY;
+                }
+                case 1 -> CATEGORIES_KEY[1];
+                case 2 -> CATEGORIES_KEY[0];
+                case 3 -> CATEGORIES_KEY[2];
                 default -> STRING_EMPTY;
             };
 
@@ -57,18 +66,22 @@ public class ShoppingCart {
                 if (itemNumber > items.size() - 1) {
                     option = -1;
                 } else {
-                    System.out.printf("\nEnter How Many:");
-                    Order order = new Order();
-                    int quantity = in.nextInt();
-                    order.setQuantity(quantity);
-                    order.setProduct(items.get(itemNumber - 1));
-                    cart.addOrder(order);
-                    cart.addToTotalAmount(order.getProduct().getPrice()*quantity);
-                    System.out.printf("\nItem Added: " + order.displayProduct(order.getProduct(), quantity));
-                    System.out.printf("\n" + cart.displayCartDetails());
+                    addToCart(in, cart, items, itemNumber);
                 }
             }
         }
+    }
+
+    private static void addToCart(Scanner in, Cart cart, List<Product> items, int itemNumber) {
+        System.out.printf("\nEnter How Many:");
+        Order order = new Order();
+        int quantity = in.nextInt();
+        order.setQuantity(quantity);
+        order.setProduct(items.get(itemNumber - 1));
+        cart.addOrder(order);
+        cart.addToTotalAmount(order.getProduct().getPrice()*quantity);
+        System.out.printf("\nItem Added: " + order.displayProduct(order.getProduct(), quantity));
+        System.out.printf("\n" + cart.getCartDetails());
     }
 
     private void addOrder(){
@@ -83,7 +96,7 @@ public class ShoppingCart {
         products.forEach(p -> {
             productsMapByCategory.computeIfAbsent(p.getCategory(), k -> new ArrayList<>()).add(p);
         });
-        CATEGORIES_KEY = productsMapByCategory.keySet().toArray(new String[0]);
+        CATEGORIES_KEY = productsMapByCategory.keySet().stream().sorted(String::compareTo).toArray(String[]::new);
 //         TODO remove later
 //         products.forEach(p -> System.out.println(p.toString()));
 //        productsMapByCategory.forEach((k,v) -> System.out.println(k + " " + v.size()));
@@ -116,5 +129,13 @@ public class ShoppingCart {
         int i = -1;
         System.out.println(optionDisplay.formatted(CATEGORY[++i], CATEGORY[++i], CATEGORY[++i]));
         System.out.println("Choose Category (-1 to Checkout, -2 to Exit):");
+    }
+
+    private static void checkout(Scanner in){
+        if (cart.getOrders().isEmpty()) {
+            System.out.println("Cart is empty, nothing to checkout.");
+        } else {
+            PaymentDetails.getPaymentDetail(in, cart);
+        }
     }
 }
