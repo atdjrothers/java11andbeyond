@@ -38,7 +38,7 @@ public class Cart {
         var totalPayable = orders
                 .stream().collect(Collectors.teeing(
                         Collectors.counting(),
-                        Collectors.summingInt(o -> ctr.incrementAndGet()),
+                        Collectors.summingDouble(o -> (o.getProduct().getPrice() * o.getQuantity())),
                         (count, sum)  -> new TotalPayable(Math.toIntExact(count), sum)
                 ));
 
