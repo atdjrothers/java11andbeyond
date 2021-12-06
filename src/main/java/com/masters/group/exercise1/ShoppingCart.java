@@ -42,7 +42,6 @@ public class ShoppingCart {
     private static void executeProgram() {
         Scanner in = new Scanner(System.in);
         int option = 0;
-        Cart cart = new Cart();
         while (option != -2) {
             displayCategories();
             option = in.nextInt();
@@ -59,12 +58,12 @@ public class ShoppingCart {
 
             if (!category.isBlank()) {
                 List<Product> items = displayItems(category);
-                addToCart(in, cart, items);
+                addToCart(in, items);
             }
         }
     }
 
-    private static void addToCart(Scanner in, Cart cart, List<Product> items) {
+    private static void addToCart(Scanner in, List<Product> items) {
         System.out.printf("\nChoose item (-1 to go back to Categories): \n");
         int itemNumber = in.nextInt();
         while(itemNumber != -1){
