@@ -138,6 +138,7 @@ public class ShoppingCart {
             System.out.println("Cart is empty, nothing to checkout.");
         } else {
             PaymentDetails.getPaymentDetail(in, cart);
+            cart.getOrders().clear();
         }
     }
 }
