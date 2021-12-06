@@ -1,16 +1,20 @@
 package com.masters.group.exercise1.models;
 
-import com.masters.twelve.TotalPayable;
-
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
-import static com.masters.group.exercise1.utils.Constants.CATEGORY;
+
+import static com.masters.group.exercise1.utils.Constants.TYPE_COUNTED_AS_ONE;
 
 public class Cart {
     private static final NumberFormat fmt = NumberFormat.getCompactNumberInstance(Locale.US, NumberFormat.Style.SHORT);
+
+    static {
+        fmt.setMinimumFractionDigits(2);
+    }
+
     private final List<Order> orders = new ArrayList<>();
 
     private double totalAmount;
@@ -34,9 +38,10 @@ public class Cart {
     public void addToTotalAmount(double amount){ this.totalAmount = this.totalAmount + amount;}
 
     public String getCartDetails(){
+
         var totalPayable = orders
                 .stream().collect(Collectors.teeing(
-                        Collectors.summingInt(((Order o) -> CATEGORY[1].equals(o.getProduct().getType()) ? 1 : (int) o.getQuantity())),
+                        Collectors.summingInt(((Order o) -> TYPE_COUNTED_AS_ONE.contains(o.getProduct().getType()) ? 1 : (int) o.getQuantity())),
                         Collectors.summingDouble(o -> (o.getProduct().getPrice() * o.getQuantity())),
                         CartTotals::new
                 ));
