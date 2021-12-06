@@ -22,6 +22,6 @@ public class Order {
     }
 
     public String displayProduct(Product product, int quantity){
-        return "name: %s | price: %s x %d | %f".formatted(product.getName(), product.getPrice(), quantity, product.getPrice() * Double.valueOf(quantity));
+        return "%s | price: %s %s x %d | %.2f".formatted(product.getName(), product.getPrice(), product.getType(), quantity, product.getPrice() * Double.valueOf(quantity));
     }
 }

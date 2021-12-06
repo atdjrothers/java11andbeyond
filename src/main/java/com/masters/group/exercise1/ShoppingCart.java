@@ -59,29 +59,32 @@ public class ShoppingCart {
 
             if (!category.isBlank()) {
                 List<Product> items = displayItems(category);
-
-                System.out.printf("\nChoose item (-1 to go back to Categories): \n");
-                int itemNumber = in.nextInt();
-
-                if (itemNumber > items.size() - 1) {
-                    option = -1;
-                } else {
-                    addToCart(in, cart, items, itemNumber);
-                }
+                addToCart(in, cart, items);
             }
         }
     }
 
-    private static void addToCart(Scanner in, Cart cart, List<Product> items, int itemNumber) {
-        System.out.printf("\nEnter How Many:");
-        Order order = new Order();
-        int quantity = in.nextInt();
-        order.setQuantity(quantity);
-        order.setProduct(items.get(itemNumber - 1));
-        cart.addOrder(order);
-        cart.addToTotalAmount(order.getProduct().getPrice()*quantity);
-        System.out.printf("\nItem Added: " + order.displayProduct(order.getProduct(), quantity));
-        System.out.printf("\n" + cart.getCartDetails());
+    private static void addToCart(Scanner in, Cart cart, List<Product> items) {
+        System.out.printf("\nChoose item (-1 to go back to Categories): \n");
+        int itemNumber = in.nextInt();
+        while(itemNumber != -1){
+            System.out.printf("\nEnter How Many:");
+            Order order = new Order();
+            int quantity = in.nextInt();
+            order.setQuantity(quantity);
+            order.setProduct(items.get(itemNumber - 1));
+            cart.addOrder(order);
+            cart.addToTotalAmount(order.getProduct().getPrice()*quantity);
+            System.out.printf("\nItem Added: " + order.displayProduct(order.getProduct(), quantity));
+            System.out.printf("\n" + cart.getCartDetails());
+
+            cart.getOrders().forEach( o -> {
+                System.out.println("\n"+ order.displayProduct(o.getProduct(),o.getQuantity()));
+            });
+            System.out.printf("\nChoose item (-1 to go back to Categories): \n");
+            itemNumber = in.nextInt();
+        }
+
     }
 
     private void addOrder(){
