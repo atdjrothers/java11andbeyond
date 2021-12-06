@@ -83,7 +83,7 @@ public class PaymentDetails {
         try {
             String filePath = new File("").getAbsolutePath();
             LocalDateTime localDateTime = LocalDateTime.now();
-            Path filepath = Paths.get("%s/src/main/resources/group-exercise1/checkout-%s.txt"
+            Path filepath = Paths.get("%s/src/main/resources/checkout-%s.txt"
                     .formatted(filePath, localDateTime.format(DateTimeFormatter.ofPattern(DATE_FILE_NAME_PATTERN))));
             Files.writeString(filepath, output, StandardOpenOption.CREATE_NEW);
         } catch (IOException e) {
