@@ -12,7 +12,9 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
-import static com.masters.group.exercise1.utils.Constants.*;
+
+import static com.masters.group.exercise1.utils.Constants.CATEGORY;
+import static com.masters.group.exercise1.utils.Constants.STRING_EMPTY;
 
 
 public class ShoppingCart {
@@ -40,9 +42,9 @@ public class ShoppingCart {
             displayCategories();
             option = in.nextInt();
             String category = switch(option) {
-                case 1 -> CATEGORIES_KEY[0];
-                case 2 -> CATEGORIES_KEY[1];
-                case 3 -> CATEGORIES_KEY[2]; // could have been option - 1
+                case 1 -> CATEGORIES_KEY[1];
+                case 2 -> CATEGORIES_KEY[0];
+                case 3 -> CATEGORIES_KEY[2];
                 default -> STRING_EMPTY;
             };
 
@@ -73,7 +75,7 @@ public class ShoppingCart {
         products.forEach(p -> {
             productsMapByCategory.computeIfAbsent(p.getCategory(), k -> new ArrayList<>()).add(p);
         });
-        CATEGORIES_KEY = productsMapByCategory.keySet().toArray(new String[0]);
+        CATEGORIES_KEY = productsMapByCategory.keySet().stream().sorted(String::compareTo).toArray(String[]::new);
 //         TODO remove later
 //         products.forEach(p -> System.out.println(p.toString()));
 //        productsMapByCategory.forEach((k,v) -> System.out.println(k + " " + v.size()));
