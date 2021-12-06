@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
+import static com.masters.group.exercise1.utils.Constants.CATEGORY;
 
 public class Cart {
     private static final NumberFormat fmt = NumberFormat.getCompactNumberInstance(Locale.US, NumberFormat.Style.SHORT);
@@ -35,9 +36,9 @@ public class Cart {
     public String getCartDetails(){
         var totalPayable = orders
                 .stream().collect(Collectors.teeing(
-                        Collectors.summingInt(Order::getQuantity),
+                        Collectors.summingInt(((Order o) -> CATEGORY[1].equals(o.getProduct().getType()) ? 1 : (int) o.getQuantity())),
                         Collectors.summingDouble(o -> (o.getProduct().getPrice() * o.getQuantity())),
-                        (count, sum)  -> new TotalPayable(Math.toIntExact(count), sum)
+                        CartTotals::new
                 ));
 
         return """
