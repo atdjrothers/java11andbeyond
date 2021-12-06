@@ -1,5 +1,6 @@
 package com.masters.group.exercise1;
 
+import com.masters.group.exercise1.models.Order;
 import com.masters.group.exercise1.models.Product;
 import com.masters.group.exercise1.utils.ProductHelper;
 
@@ -8,30 +9,60 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
-
 import static com.masters.group.exercise1.utils.Constants.*;
+
 
 public class ShoppingCart {
 
     private static final List<Product> products = new ArrayList<>();
+    private static final Map<String, List<Product>> productsMapByCategory = new HashMap<>();
+    private static String[] CATEGORIES_KEY;
+    private static final List<Order> orders = new ArrayList<>();
 
-    public static void main(String[] args){
+
+    public static void main(String[] args) throws IOException {
+        readFile();
         try {
-            Scanner in = new Scanner(System.in);
-            readFile();
-            int option = 0;
-            while(option != -2) {
-                displayCategories();
-                option = in.nextInt();
-            }
-        } catch(Exception e) {
+            executeProgram();
+        } catch (Exception e) {
             System.out.println("Invalid Option");
-            displayCategories();
+            executeProgram();
         }
+    }
+
+    private static void executeProgram() {
+        Scanner in = new Scanner(System.in);
+        int option = 0;
+        while (option != -2) {
+            displayCategories();
+            option = in.nextInt();
+            String category = switch(option) {
+                case 1 -> CATEGORIES_KEY[0];
+                case 2 -> CATEGORIES_KEY[1];
+                case 3 -> CATEGORIES_KEY[2]; // could have been option - 1
+                default -> STRING_EMPTY;
+            };
+
+            if (!category.isBlank()) {
+                List<Product> items = displayItems(category);
+
+                System.out.printf("\nChoose item (-1 to go back to Categories): \n");
+                int itemNumber = in.nextInt();
+
+                if (itemNumber < 1 || itemNumber > items.size() - 1) {
+                    option = -1;
+                } else {
+
+                }
+            }
+        }
+    }
+
+    private void addOrder(){
+
     }
 
     private static void readFile() throws IOException {
@@ -39,13 +70,33 @@ public class ShoppingCart {
         Path filepath = Paths.get("%s/src/main/resources/stocks.csv".formatted(filePath));
         String content = Files.readString(filepath);
         content.lines().filter(Predicate.not(String::isBlank)).forEach(l -> products.add(l.transform(ProductHelper::getProduct)));
-
-        products.forEach(p -> System.out.println(p.toString()));// TODO remove later
+        products.forEach(p -> {
+            productsMapByCategory.computeIfAbsent(p.getCategory(), k -> new ArrayList<>()).add(p);
+        });
+        CATEGORIES_KEY = productsMapByCategory.keySet().toArray(new String[0]);
+//         TODO remove later
+//         products.forEach(p -> System.out.println(p.toString()));
+//        productsMapByCategory.forEach((k,v) -> System.out.println(k + " " + v.size()));
     }
-    
+
+    private static List<Product> displayItems(String category) {
+        List<Product> items = productsMapByCategory.getOrDefault(category, new ArrayList<>());
+        AtomicReference<Integer> ctr = new AtomicReference<>(0);
+        System.out.println();
+        items.forEach(item -> {
+            ctr.set(ctr.get() + 1);
+            String display = """
+                    [%s] %-100s price: %.2f / %s
+                    """;
+
+            System.out.print(display.formatted(ctr.get(), item.getName(), item.getPrice(), item.getType()));
+        });
+
+        return items;
+    }
 
 
-    private static void displayCategories(){
+    private static void displayCategories() {
         String optionDisplay = """
                 Category:
                 [1] - %s
