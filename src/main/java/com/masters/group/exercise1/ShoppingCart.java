@@ -31,7 +31,6 @@ public class ShoppingCart {
     public static void main(String[] args) throws IOException {
         readFile();
         try {
-
             executeProgram();
         } catch (Exception e) {
             System.out.println("Invalid Option");
@@ -86,10 +85,6 @@ public class ShoppingCart {
 
     }
 
-    private void addOrder(){
-
-    }
-
     private static void readFile() throws IOException {
         String filePath = new File("").getAbsolutePath();
         Path filepath = Paths.get("%s/src/main/resources/stocks.csv".formatted(filePath));
@@ -99,9 +94,6 @@ public class ShoppingCart {
             productsMapByCategory.computeIfAbsent(p.getCategory(), k -> new ArrayList<>()).add(p);
         });
         CATEGORIES_KEY = productsMapByCategory.keySet().stream().sorted(String::compareTo).toArray(String[]::new);
-//         TODO remove later
-//         products.forEach(p -> System.out.println(p.toString()));
-//        productsMapByCategory.forEach((k,v) -> System.out.println(k + " " + v.size()));
     }
 
     private static List<Product> displayItems(String category) {
@@ -113,7 +105,6 @@ public class ShoppingCart {
             String display = """
                     [%s] %-100s price: %.2f / %s
                     """;
-
             System.out.print(display.formatted(ctr.get(), item.getName(), item.getPrice(), item.getType()));
         });
 
