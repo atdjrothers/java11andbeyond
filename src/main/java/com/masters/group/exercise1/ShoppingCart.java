@@ -1,7 +1,9 @@
 package com.masters.group.exercise1;
 
+import com.masters.group.exercise1.models.Cart;
 import com.masters.group.exercise1.models.Order;
 import com.masters.group.exercise1.models.Product;
+import com.masters.group.exercise1.utils.PaymentDetails;
 import com.masters.group.exercise1.utils.ProductHelper;
 
 import java.io.File;
@@ -23,11 +25,13 @@ public class ShoppingCart {
     private static final Map<String, List<Product>> productsMapByCategory = new HashMap<>();
     private static String[] CATEGORIES_KEY;
     private static final List<Order> orders = new ArrayList<>();
+    private static Cart cart = new Cart();
 
 
     public static void main(String[] args) throws IOException {
         readFile();
         try {
+
             executeProgram();
         } catch (Exception e) {
             System.out.println("Invalid Option");
@@ -42,6 +46,10 @@ public class ShoppingCart {
             displayCategories();
             option = in.nextInt();
             String category = switch(option) {
+                case -1 -> {
+                    checkout(in);
+                    yield STRING_EMPTY;
+                }
                 case 1 -> CATEGORIES_KEY[1];
                 case 2 -> CATEGORIES_KEY[0];
                 case 3 -> CATEGORIES_KEY[2];
@@ -108,5 +116,13 @@ public class ShoppingCart {
         int i = -1;
         System.out.println(optionDisplay.formatted(CATEGORY[++i], CATEGORY[++i], CATEGORY[++i]));
         System.out.println("Choose Category (-1 to Checkout, -2 to Exit):");
+    }
+
+    private static void checkout(Scanner in){
+        if (cart.getOrders().isEmpty()) {
+            System.out.println("Cart is empty, nothing to checkout.");
+        } else {
+            PaymentDetails.getPaymentDetail(in, cart);
+        }
     }
 }
