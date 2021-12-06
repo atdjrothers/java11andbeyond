@@ -67,6 +67,7 @@ public class ShoppingCart {
         System.out.printf("\nChoose item (-1 to go back to Categories): \n");
         int itemNumber = in.nextInt();
         while(itemNumber != -1){
+            System.out.printf("\nEnter How Many:");
             Order order = new Order();
             double quantity = in.nextDouble();
             order.setQuantity(quantity);
