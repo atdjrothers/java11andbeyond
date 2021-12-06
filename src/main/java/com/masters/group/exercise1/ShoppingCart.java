@@ -56,12 +56,12 @@ public class ShoppingCart {
 
             if (!category.isBlank()) {
                 List<Product> items = displayItems(category);
-                addToCart(in, items);
+                addToCart(in, items, category);
             }
         }
     }
 
-    private static void addToCart(Scanner in, List<Product> items) {
+    private static void addToCart(Scanner in, List<Product> items, String category) {
         System.out.printf("\nChoose item (-1 to go back to Categories): \n");
         int itemNumber = in.nextInt();
         while(itemNumber != -1){
@@ -75,9 +75,12 @@ public class ShoppingCart {
             System.out.printf("\nItem Added: " + order.displayProduct(order.getProduct(), quantity));
             System.out.printf("\n" + cart.getCartDetails());
 
+            System.out.printf("\nCurrent Items in Cart:\n");
             cart.getOrders().forEach( o -> {
-                System.out.println("\n"+ order.displayProduct(o.getProduct(),o.getQuantity()));
+                System.out.println(order.displayProduct(o.getProduct(),o.getQuantity()));
             });
+
+            displayItems(category);
             System.out.printf("\nChoose item (-1 to go back to Categories): \n");
             itemNumber = in.nextInt();
         }
@@ -98,7 +101,7 @@ public class ShoppingCart {
     private static List<Product> displayItems(String category) {
         List<Product> items = productsMapByCategory.getOrDefault(category, new ArrayList<>());
         AtomicReference<Integer> ctr = new AtomicReference<>(0);
-        System.out.println();
+        System.out.printf("\n\nList of items under %s:\n", category);
         items.forEach(item -> {
             ctr.set(ctr.get() + 1);
             String display = """
