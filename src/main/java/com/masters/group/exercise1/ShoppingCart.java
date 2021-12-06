@@ -24,8 +24,7 @@ public class ShoppingCart {
     private static final List<Product> products = new ArrayList<>();
     private static final Map<String, List<Product>> productsMapByCategory = new HashMap<>();
     private static String[] CATEGORIES_KEY;
-    private static final List<Order> orders = new ArrayList<>();
-    private static Cart cart = new Cart();
+    private static final Cart cart = new Cart();
 
 
     public static void main(String[] args) throws IOException {
