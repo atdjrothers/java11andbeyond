@@ -6,7 +6,6 @@ import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 public class Cart {
@@ -34,10 +33,9 @@ public class Cart {
     public void addToTotalAmount(double amount){ this.totalAmount = this.totalAmount + amount;}
 
     public String getCartDetails(){
-        AtomicInteger ctr = new AtomicInteger();
         var totalPayable = orders
                 .stream().collect(Collectors.teeing(
-                        Collectors.counting(),
+                        Collectors.summingInt(Order::getQuantity),
                         Collectors.summingDouble(o -> (o.getProduct().getPrice() * o.getQuantity())),
                         (count, sum)  -> new TotalPayable(Math.toIntExact(count), sum)
                 ));
