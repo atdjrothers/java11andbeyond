@@ -2,7 +2,17 @@ package com.masters.group.exercise1.utils;
 
 import com.masters.group.exercise1.models.Cart;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Scanner;
+
+import static com.masters.group.exercise1.utils.Constants.DATE_FILE_NAME_PATTERN;
 
 public class PaymentDetails {
 
@@ -26,7 +36,9 @@ public class PaymentDetails {
                 default -> throw new Exception("Invalid");
             };
 
-            System.out.println(paymentDetail.formatted(cart.getCartDetails()));
+            String checkoutInfo = paymentDetail.formatted(cart.getCartDetails());
+            System.out.println(checkoutInfo);
+            writeToFile(checkoutInfo);
         } catch(Exception e) {
             getPaymentDetail(in, cart);
         }
@@ -46,6 +58,7 @@ public class PaymentDetails {
                Account Name: Mau Tuazon
                Account Number: 005412345678
                Bank Name: BDO
+               %s
                """;
     }
 
@@ -64,5 +77,17 @@ public class PaymentDetails {
                Mobile Number: 09171234567
                %s
                """;
+    }
+
+    private static void writeToFile(String output)  {
+        try {
+            String filePath = new File("").getAbsolutePath();
+            LocalDateTime localDateTime = LocalDateTime.now();
+            Path filepath = Paths.get("%s/src/main/resources/group-exercise1/checkout-%s.txt"
+                    .formatted(filePath, localDateTime.format(DateTimeFormatter.ofPattern(DATE_FILE_NAME_PATTERN))));
+            Files.writeString(filepath, output, StandardOpenOption.CREATE_NEW);
+        } catch (IOException e) {
+            System.out.println("Unable to write to file... " + e.getMessage());
+        }
     }
 }
