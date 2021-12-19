@@ -1,7 +1,5 @@
 package com.masters.group.exercise2.models;
 
-import com.masters.group.exercise2.models.BankAccount;
-
 public final class SavingsAccount extends BankAccount {
 
     @Override

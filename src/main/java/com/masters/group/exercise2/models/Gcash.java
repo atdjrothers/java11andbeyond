@@ -1,7 +1,5 @@
 package com.masters.group.exercise2.models;
 
-import com.masters.group.exercise2.models.PaymentMethod;
-
 public record Gcash(String subscriberName, String mobileNumber, String nickname) implements PaymentMethod {
 
     @Override

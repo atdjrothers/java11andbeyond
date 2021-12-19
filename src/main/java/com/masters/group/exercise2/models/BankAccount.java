@@ -1,8 +1,5 @@
 package com.masters.group.exercise2.models;
 
-import com.masters.group.exercise2.models.PaymentMethod;
-import com.masters.group.exercise2.models.SavingsAccount;
-
 public sealed class BankAccount implements PaymentMethod permits CheckingAccount, SavingsAccount {
 
     @Override
